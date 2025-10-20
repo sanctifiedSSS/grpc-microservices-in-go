@@ -19,15 +19,15 @@ jobs:
     steps:
       - id: go-cache-paths
         run: |
-          echo "::set-output name=go-build::$(go env GOCACHE)"
-          echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+          echo "go-build=$(go env GOCACHE)" >> $GITHUB_OUTPUT
+          echo "go-mod=$(go env GOMODCACHE)" >> $GITHUB_OUTPUT
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
 
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v6
         with:
-          go-version: 1.17
+          go-version: 1.25
 
       - name: Install Protoc Dependencies
         run: |
@@ -37,7 +37,7 @@ jobs:
 
       # Go build cache
       - name: Go Build Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.go-cache-paths.outputs.go-build }}
           key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
